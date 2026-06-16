@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Bitácora Financiera</title>
+    <style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f5fff5; /* verde muy suave */
+        color: #2e4d2e;
+        margin: 20px;
+    }
+    h1 {
+        color: #3c8c3c;
+    }
+    .formulario {
+        margin-bottom: 20px;
+        padding: 15px;
+        border: 1px solid #a8d5a2;
+        background: #e6f7e6; /* verde claro */
+        border-radius: 8px;
+    }
+    label {
+        display: block;
+        margin-top: 10px;
+        color: #2e4d2e;
+    }
+    input, textarea, button {
+        width: 100%;
+        padding: 8px;
+        margin-top: 5px;
+        border-radius: 5px;
+        border: 1px solid #a8d5a2;
+        background-color: #f9fff9;
+    }
+    button {
+      background-color: #66bb6a; /* verde suave */
+        color: white;
+        border: none;
+        cursor: pointer;
+        margin-top: 15px;
+    }
+    button:hover {
+        background-color: #4caf50;
+    }
+    .registro {
+        background: #ffffff;
+        border: 1px solid #c8e6c9;
+        padding: 10px;
+        margin-bottom: 10px;
+        border-radius: 6px;
+    }
+    h2 {
+        color: #3c8c3c;
+    }
+    </style>
+</head>
+<body>
+    <h1>📒 Bitácora Financiera</h1>
+
+    <div class="formulario">
+    <label for="fecha">Fecha:</label>
+    <input type="date" id="fecha">
+
+    <label for="texto">Descripción:</label>
+    <textarea id="texto" rows="4" placeholder="Escribe tu registro financiero..."></textarea>
+
+    <button onclick="guardarRegistro()">Guardar</button>
+    </div>
+
+    <h2>Registros Guardados</h2>
+    <div id="bitacora"></div>
+
+    <script>
+    document.addEventListener("DOMContentLoaded", mostrarRegistros);
+
+    function guardarRegistro() {
+        const fecha = document.getElementById("fecha").value;
+        const texto = document.getElementById("texto").value;
+
+        if (fecha === "" || texto.trim() === "") {
+        alert("Por favor ingresa una fecha y un texto.");
+        return;
+        }
+
+        const registro = { fecha, texto };
+
+        let registros = JSON.parse(localStorage.getItem("bitacora")) || [];
+        registros.push(registro);
+
+        localStorage.setItem("bitacora", JSON.stringify(registros));
+
+        document.getElementById("fecha").value = "";
+        document.getElementById("texto").value = "";
+
+        mostrarRegistros();
+    }
+
+    function mostrarRegistros() {
+        const bitacoraDiv = document.getElementById("bitacora");
+        bitacoraDiv.innerHTML = "";
+
+        let registros = JSON.parse(localStorage.getItem("bitacora")) || [];
+
+        registros.forEach(registro => {
+        const div = document.createElement("div");
+        div.className = "registro";
+        div.innerHTML = `<strong>${registro.fecha}</strong><br>${registro.texto}`;
+        bitacoraDiv.appendChild(div);
+        });
+    }
+    </script>
+</body>
+</html>
